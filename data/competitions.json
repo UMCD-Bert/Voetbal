@@ -1,0 +1,51 @@
+{
+"countries": [
+  {"code":"NL","name":"Nederland","competitions":[
+    {"id":"nl-1","name":"Eredivisie","tier":1,"gender":"M"},
+    {"id":"nl-2","name":"Eerste Divisie","tier":2,"gender":"M"},
+    {"id":"nl-w","name":"Vrouwen Eredivisie","tier":1,"gender":"V"}
+  ]},
+  {"code":"DE","name":"Duitsland","competitions":[
+    {"id":"de-1","name":"Bundesliga","tier":1,"gender":"M"},
+    {"id":"de-2","name":"2. Bundesliga","tier":2,"gender":"M"},
+    {"id":"de-w","name":"Frauen-Bundesliga","tier":1,"gender":"V"}
+  ]},
+  {"code":"EN","name":"Engeland","competitions":[
+    {"id":"en-1","name":"Premier League","tier":1,"gender":"M"},
+    {"id":"en-2","name":"Championship","tier":2,"gender":"M"},
+    {"id":"en-w","name":"Women's Super League","tier":1,"gender":"V"}
+  ]},
+  {"code":"ES","name":"Spanje","competitions":[
+    {"id":"es-1","name":"La Liga","tier":1,"gender":"M"},
+    {"id":"es-2","name":"Segunda División","tier":2,"gender":"M"},
+    {"id":"es-w","name":"Liga F","tier":1,"gender":"V"}
+  ]},
+  {"code":"IT","name":"Italië","competitions":[
+    {"id":"it-1","name":"Serie A","tier":1,"gender":"M"},
+    {"id":"it-2","name":"Serie B","tier":2,"gender":"M"},
+    {"id":"it-w","name":"Serie A Femminile","tier":1,"gender":"V"}
+  ]},
+  {"code":"FR","name":"Frankrijk","competitions":[
+    {"id":"fr-1","name":"Ligue 1","tier":1,"gender":"M"},
+    {"id":"fr-2","name":"Ligue 2","tier":2,"gender":"M"},
+    {"id":"fr-w","name":"Première Ligue","tier":1,"gender":"V"}
+  ]},
+  {"code":"DEMO","name":"Demo","competitions":[
+    {"id":"demo-1","name":"Demo League (voorbeeld)","tier":1,"gender":"M"}
+  ]}
+],
+"seasons": {
+  "nl-1": [{"id":"2025-26","label":"2025/26","status":"completed"}],
+  "nl-2": [],
+  "nl-w": [],
+  "de-1": [], "de-2": [], "de-w": [],
+  "en-1": [], "en-2": [], "en-w": [],
+  "es-1": [], "es-2": [], "es-w": [],
+  "it-1": [], "it-2": [], "it-w": [],
+  "fr-1": [], "fr-2": [], "fr-w": [],
+  "demo-1": [
+    {"id":"2025-demo","label":"2025 (afgerond)","status":"completed"},
+    {"id":"2026-demo","label":"2026 (lopend)","status":"in_progress","previousSeason":"2025-demo"}
+  ]
+}
+}

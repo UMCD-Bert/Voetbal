@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Europese competities — stand, uitslagen &amp; voorspelling</title>
+<meta name="description" content="Stand en onderlinge uitslagen van Europese voetbalcompetities, met voorspelde eindstand voor lopende seizoenen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pitch-dark:#0A2A1E; --pitch:#0F3D2A; --line:#2E6B4A;
+    --chalk:#F4F1E4; --oranje:#FF6A13; --gold:#FFC94D; --ink:#0A1F16;
+    --red:#D64545; --blue:#57B8FF; --purple:#9B8CFF;
+    --card:#123526; --card-border:#2A5A40;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 120px),
+      radial-gradient(ellipse at 50% -10%, #164a33 0%, var(--pitch-dark) 55%);
+    color:var(--chalk); font-family:'IBM Plex Sans', sans-serif; -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--oranje); color:#0A1F16;}
+
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    padding:14px clamp(16px,4vw,48px);
+    background:rgba(10,42,30,0.9); backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .brand{font-family:'Anton', sans-serif; letter-spacing:0.5px; font-size:19px; white-space:nowrap;}
+  .brand .yr{color:var(--oranje);}
+  .selectors{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+  select{
+    background:var(--card); color:var(--chalk); border:1px solid var(--card-border);
+    padding:8px 10px; border-radius:6px; font-family:'IBM Plex Sans'; font-size:13px; font-weight:600;
+    min-width:140px;
+  }
+  select:focus-visible, input:focus-visible, button:focus-visible, a:focus-visible{
+    outline:2px solid var(--oranje); outline-offset:2px;
+  }
+
+  .hero{padding:clamp(36px,6vw,72px) clamp(16px,4vw,48px) clamp(24px,4vw,40px); max-width:1180px; margin:0 auto;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--gold); margin:0 0 16px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--gold);display:inline-block;}
+  h1.title{
+    font-family:'Anton', sans-serif; font-weight:400; font-size:clamp(32px,6vw,64px);
+    line-height:0.96; margin:0 0 14px; letter-spacing:0.3px;
+  }
+  h1.title .accent{color:var(--oranje);}
+  .hero-sub{font-size:15px; line-height:1.6; color:#D9E5DC; max-width:60ch; margin:0 0 24px;}
+
+  /* mode toggle */
+  .mode-toggle{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+  .mode-toggle .group{display:inline-flex; border:1px solid var(--card-border); border-radius:8px; overflow:hidden;}
+  .mode-toggle button{
+    background:var(--card); color:var(--chalk); border:none; padding:10px 16px; font-size:13px;
+    font-weight:600; font-family:'IBM Plex Sans'; cursor:pointer; transition:background .15s,color .15s;
+  }
+  .mode-toggle button + button{border-left:1px solid var(--card-border);}
+  .mode-toggle button.active{background:var(--oranje); color:#1a0f05;}
+  .mode-note{font-size:12.5px; color:#9FC1AC; margin-top:10px; max-width:64ch; line-height:1.5;}
+
+  .facts{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.08); border-radius:8px; overflow:hidden; margin-top:28px;
+  }
+  .fact{background:var(--pitch-dark); padding:16px 14px;}
+  .fact .n{font-family:'IBM Plex Mono',monospace; font-size:22px; color:var(--gold); font-weight:600;}
+  .fact .l{font-size:11.5px; color:#B9CDBF; margin-top:4px;}
+  @media (max-width:700px){.facts{grid-template-columns:repeat(2,1fr);}}
+
+  section{max-width:1180px; margin:0 auto; padding:48px clamp(16px,4vw,48px); scroll-margin-top:78px;}
+  .section-head{display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:22px; flex-wrap:wrap;}
+  h2.h{font-family:'Anton', sans-serif; font-weight:400; font-size:clamp(24px,3.4vw,34px); margin:0;}
+  .h-note{font-size:13px; color:#9FC1AC; max-width:44ch;}
+
+  .table-wrap{border:1px solid var(--card-border); border-radius:8px; overflow:hidden; background:var(--card);}
+  table.standings{width:100%; border-collapse:collapse; font-size:14px;}
+  table.standings thead th{
+    font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:11px; text-transform:uppercase;
+    letter-spacing:1px; color:#9FC1AC; text-align:right; padding:12px 10px; border-bottom:1px solid var(--card-border);
+  }
+  table.standings thead th.left, table.standings td.left{text-align:left;}
+  table.standings td{padding:10px 10px; text-align:right; border-bottom:1px solid rgba(255,255,255,0.05);}
+  table.standings tbody tr:hover{background:rgba(255,255,255,0.035);}
+  table.standings tbody tr:last-child td{border-bottom:none;}
+  td.pos{font-family:'IBM Plex Mono',monospace; color:#9FC1AC; position:relative;}
+  td.pos .zone{position:absolute; left:0; top:0; bottom:0; width:4px;}
+  td.club{text-align:left; font-weight:600;}
+  td.pts{font-family:'IBM Plex Mono',monospace; font-weight:700; color:var(--gold); font-size:15px;}
+  .zone-cl .zone{background:var(--oranje);} .zone-el .zone{background:var(--blue);}
+  .zone-ecl .zone{background:var(--purple);} .zone-deg .zone{background:var(--red);}
+  .zone-champ .zone{background:var(--gold);}
+  .legend{display:flex; flex-wrap:wrap; gap:16px; margin-top:14px; font-size:12px; color:#B9CDBF;}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .legend i{width:10px; height:10px; border-radius:2px; display:inline-block;}
+
+  .matrix-controls{display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px;}
+  .matrix-controls input[type="search"]{
+    background:var(--card); border:1px solid var(--card-border); color:var(--chalk);
+    padding:9px 12px; border-radius:6px; font-family:'IBM Plex Sans'; font-size:13px; width:220px;
+  }
+  .hint{font-size:12px; color:#9FC1AC;}
+  .matrix-scroll{overflow:auto; border:1px solid var(--card-border); border-radius:8px; background:var(--card); max-height:72vh;}
+  table.matrix{border-collapse:separate; border-spacing:0; font-family:'IBM Plex Mono',monospace; font-size:12px;}
+  table.matrix th, table.matrix td{
+    border-bottom:1px solid rgba(255,255,255,0.06); border-right:1px solid rgba(255,255,255,0.06); text-align:center;
+  }
+  table.matrix thead th{position:sticky; top:0; z-index:3; background:#0d3324; height:120px; width:34px; min-width:34px; padding:6px 0; vertical-align:bottom;}
+  table.matrix thead th.corner{left:0; z-index:5; position:sticky; width:160px; min-width:160px; background:#0d3324;}
+  table.matrix thead th .rot{writing-mode:vertical-rl; transform:rotate(180deg); font-weight:600; letter-spacing:0.5px; color:#D9E5DC; font-size:11px;}
+  table.matrix tbody th{position:sticky; left:0; z-index:2; background:#0d3324; text-align:left; padding:0 10px; font-family:'IBM Plex Sans'; font-weight:600; font-size:12.5px; color:var(--chalk); white-space:nowrap; min-width:160px;}
+  table.matrix td{width:34px; height:30px; color:#EDEAE0;}
+  table.matrix td.win{background:rgba(46,140,90,0.55);}
+  table.matrix td.draw{background:rgba(255,201,77,0.28); color:#FFE9B3;}
+  table.matrix td.loss{background:rgba(214,69,69,0.42);}
+  table.matrix td.unknown{background:repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0 4px, transparent 4px 8px); color:#6E8A7A;}
+  table.matrix td.scheduled{background:rgba(255,255,255,0.03); color:#6E8A7A;}
+  table.matrix td.predicted{outline:1px dashed rgba(255,201,77,0.7); outline-offset:-2px;}
+  table.matrix td.self{background:repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 3px, transparent 3px 7px);}
+  table.matrix tr.hi-row td, table.matrix tr.hi-row th{filter:brightness(1.35);}
+  table.matrix td.hi-col{filter:brightness(1.35);}
+  table.matrix tbody th.dim, table.matrix thead th.dim .rot{opacity:0.28;}
+  table.matrix td.dim{opacity:0.28;}
+  .matrix-legend{display:flex; gap:16px; flex-wrap:wrap; margin-top:14px; font-size:12px; color:#B9CDBF;}
+  .matrix-legend span{display:inline-flex; align-items:center; gap:6px;}
+  .matrix-legend i{width:14px;height:14px;border-radius:3px;display:inline-block;}
+
+  .empty-state{
+    border:1px dashed var(--card-border); border-radius:10px; padding:56px 32px; text-align:center;
+    color:#B9CDBF; background:rgba(255,255,255,0.02);
+  }
+  .empty-state .big{font-family:'Anton', sans-serif; font-size:28px; color:var(--chalk); margin-bottom:10px;}
+  .empty-state p{max-width:52ch; margin:0 auto; font-size:14px; line-height:1.6;}
+
+  footer{
+    max-width:1180px; margin:0 auto; padding:36px clamp(16px,4vw,48px) 80px; color:#8FAE9C; font-size:13px;
+    line-height:1.7; border-top:1px solid rgba(255,255,255,0.08);
+  }
+  footer a{text-decoration:underline; text-underline-offset:3px;}
+
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{transition:none !important;} }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="brand">EUROVELD <span class="yr">STATS</span></div>
+  <div class="selectors">
+    <select id="countrySelect" aria-label="Land"></select>
+    <select id="compSelect" aria-label="Competitie"></select>
+    <select id="seasonSelect" aria-label="Seizoen"></select>
+  </div>
+</header>
+
+<div id="app"></div>
+
+<footer id="footerNote">
+  Data wordt handmatig ververst — geen live API-koppeling. Voorspelde eindstanden zijn gebaseerd op de
+  onderlinge uitslag uit het vorige seizoen tussen dezelfde thuis/uit-combinatie; ontbreekt die (bijv. bij een
+  gepromoveerde club), dan wordt 0-0 aangehouden.
+</footer>
+
+<script>
+const $ = (sel, ctx=document) => ctx.querySelector(sel);
+const $$ = (sel, ctx=document) => [...ctx.querySelectorAll(sel)];
+
+let REGISTRY = null;
+let currentSeasonData = null;
+let previousSeasonData = null;
+let currentMode = 'played'; // 'played' | 'projected'
+
+const countrySelect = $('#countrySelect');
+const compSelect = $('#compSelect');
+const seasonSelect = $('#seasonSelect');
+const app = $('#app');
+
+async function loadJSON(path){
+  const res = await fetch(path);
+  if(!res.ok) throw new Error('Kon '+path+' niet laden');
+  return res.json();
+}
+
+function findCountry(code){ return REGISTRY.countries.find(c => c.code === code); }
+function findComp(compId){
+  for(const c of REGISTRY.countries){
+    const comp = c.competitions.find(x => x.id === compId);
+    if(comp) return comp;
+  }
+  return null;
+}
+
+function populateCountries(){
+  countrySelect.innerHTML = REGISTRY.countries.map(c => `<option value="${c.code}">${c.name}</option>`).join('');
+}
+function populateCompetitions(){
+  const country = findCountry(countrySelect.value);
+  compSelect.innerHTML = country.competitions.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+}
+function populateSeasons(){
+  const seasons = REGISTRY.seasons[compSelect.value] || [];
+  if(seasons.length === 0){
+    seasonSelect.innerHTML = `<option value="">—</option>`;
+    seasonSelect.disabled = true;
+  } else {
+    seasonSelect.disabled = false;
+    seasonSelect.innerHTML = seasons.map(s => `<option value="${s.id}">${s.label}</option>`).join('');
+    seasonSelect.selectedIndex = seasons.length - 1; // most recent by default
+  }
+}
+
+countrySelect.addEventListener('change', () => { populateCompetitions(); populateSeasons(); loadSeason(); });
+compSelect.addEventListener('change', () => { populateSeasons(); loadSeason(); });
+seasonSelect.addEventListener('change', () => { loadSeason(); });
+
+async function loadSeason(){
+  const compId = compSelect.value;
+  const seasonId = seasonSelect.value;
+  if(!seasonId){ renderEmptyState(findComp(compId)); return; }
+  app.innerHTML = `<div style="max-width:1180px;margin:60px auto;text-align:center;color:#9FC1AC;font-family:'IBM Plex Mono',monospace;font-size:13px;">Laden…</div>`;
+  try{
+    currentSeasonData = await loadJSON(`data/${compId}/${seasonId}.json`);
+    previousSeasonData = null;
+    currentMode = 'played';
+    if(currentSeasonData.status === 'in_progress' && currentSeasonData.previousSeason){
+      previousSeasonData = await loadJSON(`data/${compId}/${currentSeasonData.previousSeason}.json`);
+    }
+    renderSeason();
+  } catch(err){
+    app.innerHTML = `<div class="empty-state" style="max-width:640px;margin:60px auto;">
+      <div class="big">Kon data niet laden</div><p>${err.message}</p></div>`;
+  }
+}
+
+function renderEmptyState(comp){
+  app.innerHTML = `
+  <section>
+    <div class="empty-state">
+      <div class="big">${comp ? comp.name : 'Deze competitie'} staat nog op de planning</div>
+      <p>Er is nog geen data toegevoegd voor deze competitie. Vraag erom in de chat en hij wordt aangevuld.</p>
+    </div>
+  </section>`;
+}
+
+/* ---------- Prediction engine ---------- */
+function buildPrevIndex(prevMatches){
+  const idx = {};
+  (prevMatches || []).forEach(m => { idx[m.home+'||'+m.away] = m.score; });
+  return idx;
+}
+
+function resolveScore(match, mode, prevIndex){
+  if(match.score) return { score: match.score, predicted:false, state:'played' };
+  if(mode === 'played') return { score:null, predicted:false, state: currentSeasonData.status==='in_progress' ? 'scheduled':'unknown' };
+  // projected mode, no actual score
+  const key = match.home+'||'+match.away;
+  const prevScore = prevIndex[key];
+  return { score: prevScore || '0-0', predicted:true, state:'played' };
+}
+
+function computeStandings(teams, matches, mode, prevIndex){
+  const stats = {};
+  teams.forEach(t => stats[t] = {club:t,g:0,w:0,d:0,l:0,gf:0,ga:0});
+  matches.forEach(m => {
+    const r = resolveScore(m, mode, prevIndex);
+    if(!r.score) return;
+    const [h,a] = r.score.split('-').map(Number);
+    const home = stats[m.home], away = stats[m.away];
+    home.g++; away.g++;
+    home.gf += h; home.ga += a;
+    away.gf += a; away.ga += h;
+    if(h > a){ home.w++; away.l++; }
+    else if(h < a){ away.w++; home.l++; }
+    else { home.d++; away.d++; }
+  });
+  const arr = Object.values(stats).map(s => ({...s, pts: s.w*3 + s.d, gd: s.gf - s.ga}));
+  arr.sort((x,y) => y.pts - x.pts || y.gd - x.gd || y.gf - x.gf || x.club.localeCompare(y.club));
+  return arr;
+}
+
+/* ---------- Rendering ---------- */
+function renderSeason(){
+  const data = currentSeasonData;
+  const isProgress = data.status === 'in_progress';
+  const prevIndex = buildPrevIndex(previousSeasonData ? previousSeasonData.matches : []);
+  const standings = data.standings && !isProgress
+    ? data.standings.map(s => ({...s, gd: s.gf - s.ga}))
+    : computeStandings(data.teams, data.matches, currentMode, prevIndex);
+
+  const played = data.matches.filter(m => m.score).length;
+  const total = data.matches.length;
+  const leader = standings[0];
+
+  app.innerHTML = `
+    <div class="hero">
+      <p class="eyebrow">${isProgress ? 'Seizoen loopt — '+played+'/'+total+' duels gespeeld' : 'Seizoen afgerond'}</p>
+      <h1 class="title">${data.label}<br><span class="accent">${leader ? leader.club : ''}</span></h1>
+      <p class="hero-sub">${isProgress
+        ? 'Kies hieronder of je alleen de gespeelde wedstrijden wilt zien, of een voorspelde eindstand op basis van vorig seizoen.'
+        : 'Volledige eindstand en onderlinge uitslagen van dit seizoen.'}</p>
+      ${isProgress ? `
+        <div class="mode-toggle">
+          <div class="group">
+            <button data-mode="played" class="${currentMode==='played'?'active':''}">Alleen gespeeld</button>
+            <button data-mode="projected" class="${currentMode==='projected'?'active':''}">Voorspelde eindstand</button>
+          </div>
+        </div>
+        <p class="mode-note">${currentMode==='projected'
+          ? 'Nog niet gespeelde duels zijn ingevuld met de uitslag van dezelfde thuis/uit-combinatie uit ' + (previousSeasonData ? previousSeasonData.label : 'vorig seizoen') + '. Was die er niet (bijv. een gepromoveerde club), dan is 0-0 aangehouden. Voorspelde cijfers hebben een stippellijn.'
+          : 'Stand telt alleen de duels die echt gespeeld zijn.'}</p>
+      ` : ''}
+      <div class="facts">
+        <div class="fact"><div class="n">${played}/${total}</div><div class="l">duels gespeeld</div></div>
+        <div class="fact"><div class="n">${leader ? leader.pts : '–'}</div><div class="l">punten koploper</div></div>
+        <div class="fact"><div class="n">${data.teams.length}</div><div class="l">clubs</div></div>
+        <div class="fact"><div class="n">${isProgress ? (currentMode==='projected'?'Voorspeld':'Actueel') : 'Definitief'}</div><div class="l">weergave</div></div>
+      </div>
+    </div>
+
+    <section id="stand">
+      <div class="section-head">
+        <h2 class="h">${isProgress ? (currentMode==='projected' ? 'Voorspelde eindstand' : 'Actuele stand') : 'Eindstand'}</h2>
+        <p class="h-note">${isProgress ? '' : 'Definitieve ranglijst na '+total+' speelrondes.'}</p>
+      </div>
+      <div class="table-wrap">
+        <table class="standings">
+          <thead><tr>
+            <th class="left">#</th><th class="left">Club</th>
+            <th>G</th><th>W</th><th>GL</th><th>V</th><th>Voor</th><th>Tegen</th><th>DS</th><th>Ptn</th>
+          </tr></thead>
+          <tbody>${standingsRows(standings, data.zones)}</tbody>
+        </table>
+      </div>
+      ${zoneLegend(data.zones)}
+    </section>
+
+    <section id="matrix">
+      <div class="section-head">
+        <h2 class="h">Uitslagenmatrix</h2>
+        <p class="h-note">Rij = thuisploeg, kolom = uitploeg. Zoek of klik een club om die rij en kolom te markeren.</p>
+      </div>
+      <div class="matrix-controls">
+        <input type="search" id="teamSearch" placeholder="Zoek een club…" aria-label="Zoek een club">
+        <span class="hint" id="matrixHint">Alle ${data.teams.length} clubs zichtbaar</span>
+      </div>
+      <div class="matrix-scroll">
+        <table class="matrix" id="matrixTable">
+          <thead><tr id="matrixHead"><th class="corner">Thuis \\ Uit</th></tr></thead>
+          <tbody id="matrixBody"></tbody>
+        </table>
+      </div>
+      <div class="matrix-legend">
+        <span><i style="background:rgba(46,140,90,0.85)"></i> Thuisploeg wint</span>
+        <span><i style="background:rgba(255,201,77,0.7)"></i> Gelijkspel</span>
+        <span><i style="background:rgba(214,69,69,0.75)"></i> Thuisploeg verliest</span>
+        <span><i style="background:repeating-linear-gradient(45deg,#3a4a42 0 3px,#243830 3px 6px)"></i> ${isProgress ? 'Nog te spelen':'Onbekend'}</span>
+        ${isProgress && currentMode==='projected' ? '<span><i style="outline:1px dashed rgba(255,201,77,0.9); background:rgba(255,201,77,0.28)"></i> Voorspeld</span>' : ''}
+      </div>
+    </section>
+  `;
+
+  if(isProgress){
+    $$('.mode-toggle button').forEach(b => b.addEventListener('click', () => {
+      currentMode = b.dataset.mode;
+      renderSeason();
+    }));
+  }
+
+  renderMatrix(data, prevIndex);
+}
+
+function standingsRows(standings, zones){
+  return standings.map((s, i) => {
+    const zoneClass = zones && zones[s.club] ? 'zone-'+zones[s.club] : (i===0 && !zones ? 'zone-champ' : (!zones && i >= standings.length-3 ? 'zone-deg' : ''));
+    return `<tr>
+      <td class="pos ${zoneClass}"><span class="zone"></span>${i+1}</td>
+      <td class="club">${s.club}</td>
+      <td>${s.g}</td><td>${s.w}</td><td>${s.d}</td><td>${s.l}</td>
+      <td>${s.gf}</td><td>${s.ga}</td><td>${s.gd>0?'+':''}${s.gd}</td>
+      <td class="pts">${s.pts}</td>
+    </tr>`;
+  }).join('');
+}
+
+function zoneLegend(zones){
+  if(zones){
+    return `<div class="legend">
+      <span><i style="background:var(--oranje)"></i> Champions League</span>
+      <span><i style="background:var(--blue)"></i> Europa League</span>
+      <span><i style="background:var(--purple)"></i> Conference League</span>
+      <span><i style="background:var(--red)"></i> Degradatie</span>
+    </div>`;
+  }
+  return `<div class="legend">
+    <span><i style="background:var(--gold)"></i> Koploper</span>
+    <span><i style="background:var(--red)"></i> Laatste drie</span>
+  </div>`;
+}
+
+function renderMatrix(data, prevIndex){
+  const teams = data.teams;
+  const matchMap = {};
+  data.matches.forEach(m => { matchMap[m.home+'||'+m.away] = m; });
+
+  const head = $('#matrixHead');
+  head.innerHTML = `<th class="corner">Thuis \\ Uit</th>` +
+    teams.map(t => `<th data-team="${t}"><span class="rot">${t}</span></th>`).join('');
+
+  const body = $('#matrixBody');
+  body.innerHTML = teams.map(home => {
+    let row = `<tr data-team="${home}"><th data-team="${home}">${home}</th>`;
+    teams.forEach(away => {
+      if(home === away){ row += `<td class="self"></td>`; return; }
+      const m = matchMap[home+'||'+away];
+      const r = resolveScore(m, currentMode, prevIndex);
+      let cls, label;
+      if(r.state === 'unknown'){ cls='unknown'; label='?'; }
+      else if(r.state === 'scheduled'){ cls='scheduled'; label='–'; }
+      else {
+        const [h,a] = r.score.split('-').map(Number);
+        cls = h>a ? 'win' : (h===a ? 'draw' : 'loss');
+        label = r.score.replace('-','–');
+        if(r.predicted) cls += ' predicted';
+      }
+      row += `<td class="${cls}" data-home="${home}" data-away="${away}">${label}</td>`;
+    });
+    row += `</tr>`;
+    return row;
+  }).join('');
+
+  const rows = $$('tr', body);
+  body.addEventListener('mouseover', e => {
+    const cell = e.target.closest('td, th'); if(!cell) return;
+    const team = cell.dataset.team || cell.dataset.home; if(!team) return;
+    rows.forEach(r => r.classList.toggle('hi-row', r.dataset.team === team));
+    $$('td', body).forEach(td => td.classList.toggle('hi-col', td.dataset.away === team));
+  });
+  body.addEventListener('mouseleave', () => {
+    rows.forEach(r => r.classList.remove('hi-row'));
+    $$('td.hi-col', body).forEach(td => td.classList.remove('hi-col'));
+  });
+
+  const search = $('#teamSearch');
+  const hint = $('#matrixHint');
+  search.value = '';
+  search.oninput = () => {
+    const q = search.value.trim().toLowerCase();
+    const showAll = q.length === 0;
+    const matchSet = new Set(teams.filter(t => t.toLowerCase().includes(q)));
+    let visible = 0;
+    rows.forEach(r => {
+      const show = showAll || matchSet.has(r.dataset.team);
+      r.style.display = show ? '' : 'none';
+      if(show) visible++;
+    });
+    $$('th[data-team]', head).forEach(th => {
+      const show = showAll || matchSet.has(th.dataset.team);
+      th.style.display = show ? '' : 'none';
+      $$(`td[data-away="${th.dataset.team}"]`, body).forEach(td => td.style.display = show ? '' : 'none');
+    });
+    hint.textContent = showAll ? `Alle ${teams.length} clubs zichtbaar` : `${visible} club${visible===1?'':'s'} gevonden`;
+  };
+}
+
+/* ---------- Boot ---------- */
+(async function init(){
+  REGISTRY = await loadJSON('data/competitions.json');
+  populateCountries();
+  populateCompetitions();
+  populateSeasons();
+  loadSeason();
+})();
+</script>
+</body>
+</html>

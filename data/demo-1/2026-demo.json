@@ -1,0 +1,20 @@
+{
+"competition": "demo-1",
+"season": "2026-demo",
+"label": "2026 (lopend)",
+"status": "in_progress",
+"previousSeason": "2025-demo",
+"teams": ["Sterrenveld FC", "Noorderlicht SC", "Rivierstad United", "Wolvendal", "Duinstad SC"],
+"matches": [
+  {"home": "Sterrenveld FC", "away": "Noorderlicht SC", "score": "1-0"},
+  {"home": "Sterrenveld FC", "away": "Rivierstad United", "score": "2-2"},
+  {"home": "Noorderlicht SC", "away": "Rivierstad United", "score": "0-1"},
+  {"home": "Sterrenveld FC", "away": "Duinstad SC", "score": "2-0"},
+  {"home": "Noorderlicht SC", "away": "Wolvendal", "score": "1-1"},
+  {"home": "Sterrenveld FC", "away": "Wolvendal", "score": null},
+  {"home": "Noorderlicht SC", "away": "Duinstad SC", "score": null},
+  {"home": "Rivierstad United", "away": "Wolvendal", "score": null},
+  {"home": "Rivierstad United", "away": "Duinstad SC", "score": null},
+  {"home": "Wolvendal", "away": "Duinstad SC", "score": null}
+]
+}
