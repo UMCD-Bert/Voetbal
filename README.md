@@ -1,4 +1,4 @@
-# EuroVeld Stats — meerdere landen, competities & seizoenen
+# Voetbal — meerdere landen, competities & seizoenen
 
 Statische site (HTML/CSS/JS) die per land, competitie en seizoen de stand,
 onderlinge uitslagen laat zien — en voor een lopend seizoen kan schakelen
